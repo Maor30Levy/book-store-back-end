@@ -36,11 +36,15 @@ const bookSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    summary: {
+        type: String,
+    },
     image: {
         type: String,
 
     },
-    tags: [String]
+    tags: [String],
+    
 },
 {
     timestamps: true

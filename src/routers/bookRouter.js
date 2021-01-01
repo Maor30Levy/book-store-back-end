@@ -124,4 +124,16 @@ router.get('/books/:isbn',async (req,res)=>{
     }
 });
 
+router.patch('/books/add-comment', async (req,res)=>{
+    try{
+    const book = await Book.findOne({isbn: req.body.isbn});
+    if(req.body.rating){
+        
+    }
+    }catch(err){
+        
+    }
+
+});
+
 module.exports = router;
