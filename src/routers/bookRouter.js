@@ -42,6 +42,7 @@ router.patch('/books/edit/:isbn', auth,async (req,res)=>{
         'price',
         'isbn',
         'image',
+        'summary'
     ];
     const reqKeys = Object.keys(req.body);
     for(let key of reqKeys){
