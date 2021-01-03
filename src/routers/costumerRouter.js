@@ -80,6 +80,19 @@ router.get('/costumer/', auth, async (req,res)=>{
     }    
 });
 
+router.get('/costumer/getUserNames', async (req,res)=>{
+    try{
+        const users = await Costumer.find({ });
+        let userNames = [];
+        for(let user of users){
+            userNames = userNames.concat(user.userName);
+        }
+        res.send(userNames);
+    }catch(err){
+        res.status(500).send();
+    }    
+});
+
 router.get('/costumer/cart', auth, async (req,res)=>{
     try{
         const costumer = req.user;
