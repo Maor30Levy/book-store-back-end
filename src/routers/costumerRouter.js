@@ -26,7 +26,7 @@ router.post('/costumer/login',async (req,res)=>{
 
 router.post('/costumer/logout', auth ,async (req,res)=>{
     try{
-        const costumer = req.costumer;
+        const costumer = req.user;
         costumer.tokens = costumer.tokens.filter((token)=>{
             return token.token !==req.token;
         });
@@ -39,7 +39,7 @@ router.post('/costumer/logout', auth ,async (req,res)=>{
 
 router.post('/costumer/logout-all', auth, async (req,res)=>{
     try{
-        const costumer = req.costumer;
+        const costumer = req.user;
         costumer.tokens = [];
         await costumer.save();
         res.send('Logout all successful')
@@ -57,7 +57,7 @@ router.patch('/costumer/edit', auth,async (req,res)=>{
         }
     }
     try{
-        const costumer = req.costumer;
+        const costumer = req.user;
         for (let key of reqKeys){
             costumer[key] = req.body[key];
         }
@@ -70,7 +70,7 @@ router.patch('/costumer/edit', auth,async (req,res)=>{
 
 router.get('/costumer/', auth, async (req,res)=>{
     try{
-        const costumer = req.costumer;
+        const costumer = req.user;
         if(!costumer){
             return res.status(404).send({status: 404, message: 'User not found'});
         }
@@ -82,7 +82,7 @@ router.get('/costumer/', auth, async (req,res)=>{
 
 router.get('/costumer/cart', auth, async (req,res)=>{
     try{
-        const costumer = req.costumer;
+        const costumer = req.user;
         if(!costumer){
             return res.status(404).send({status: 404, message: 'No available details'});
         }
