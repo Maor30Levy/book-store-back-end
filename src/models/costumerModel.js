@@ -31,7 +31,10 @@ const costumerSchema = new mongoose.Schema({
             required: true
         }
     }],
-    cart: [String],
+    cart: [{
+        type: String,
+        default: []
+    }],
     avatar: {
         type: Buffer,
     }
