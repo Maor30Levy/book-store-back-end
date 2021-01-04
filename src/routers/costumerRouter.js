@@ -8,7 +8,7 @@ router.post('/costumer/new',async (req,res)=>{
     try{
         const costumer = await new Costumer(req.body);
         const token = await costumer.generateAuthToken();
-        res.status(201).send(token);
+        res.status(201).send({costumer,token});
     }catch(err){
         res.send(err.message);
     }
@@ -16,7 +16,9 @@ router.post('/costumer/new',async (req,res)=>{
 });
 router.post('/costumer/login',async (req,res)=>{
     try{
-        const costumer = await Costumer.findByCredentials(req.body.username, req.body.password);
+        console.log(req.body.userName, req.body.password);
+        const costumer = await Costumer.findByCredentials(req.body.userName, req.body.password);
+        
         const token = await costumer.generateAuthToken();
         res.send({costumer,token});
     }catch(err){
@@ -59,7 +61,12 @@ router.patch('/costumer/edit', auth,async (req,res)=>{
     try{
         const costumer = req.user;
         for (let key of reqKeys){
-            costumer[key] = req.body[key];
+            if(key==='cart'){
+                costumer[key] = JSON.parse(req.body[key]);
+            }else{
+                costumer[key] = req.body[key];
+            }
+                
         }
         await costumer.save();
         res.send(costumer)

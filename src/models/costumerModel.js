@@ -44,8 +44,8 @@ const costumerSchema = new mongoose.Schema({
 });
 
 
-costumerSchema.statics.findByCredentials = async (username,password)=>{
-    const costumer = await Costumer.findOne({username});
+costumerSchema.statics.findByCredentials = async (userName,password)=>{
+    const costumer = await Costumer.findOne({userName});
     if(!costumer){
         throw new Error('Unable to login');
     }
