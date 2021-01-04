@@ -16,7 +16,7 @@ router.post('/costumer/new',async (req,res)=>{
 });
 router.post('/costumer/login',async (req,res)=>{
     try{
-        const costumer = await Costumer.findByCredentials(req.body.costumername, req.body.password);
+        const costumer = await Costumer.findByCredentials(req.body.username, req.body.password);
         const token = await costumer.generateAuthToken();
         res.send({token});
     }catch(err){
