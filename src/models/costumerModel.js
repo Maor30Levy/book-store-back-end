@@ -31,12 +31,7 @@ const costumerSchema = new mongoose.Schema({
             required: true
         }
     }],
-    cart: [{
-        isbn: {
-            type: String,
-            required: true
-        }
-    }],
+    cart: [String],
     avatar: {
         type: Buffer,
     }
