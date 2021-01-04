@@ -49,7 +49,7 @@ router.post('/costumer/logout-all', auth, async (req,res)=>{
 });
 
 router.patch('/costumer/edit', auth,async (req,res)=>{
-    const validKeys = ['userName','password','email'];
+    const validKeys = ['userName','password','email','cart'];
     const reqKeys = Object.keys(req.body);
     for(let key of reqKeys){
         if(!validKeys.includes(key)){
