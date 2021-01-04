@@ -1,5 +1,5 @@
 const express = require('express');
-const {userAuth} = require('../middleware/auth');
+const auth = require('../middleware/auth');
 const User = require('../models/userModel');
 const router = new express.Router();
 
@@ -24,7 +24,7 @@ router.post('/user/login',async (req,res)=>{
     }
 });
 
-router.post('/user/logout', userAuth ,async (req,res)=>{
+router.post('/user/logout', auth ,async (req,res)=>{
     try{
         const user = req.user;
         user.tokens = user.tokens.filter((token)=>{
@@ -37,7 +37,7 @@ router.post('/user/logout', userAuth ,async (req,res)=>{
     }
 });
 
-router.post('/user/logout-all', userAuth, async (req,res)=>{
+router.post('/user/logout-all', auth, async (req,res)=>{
     try{
         const user = req.user;
         user.tokens = [];
@@ -48,7 +48,7 @@ router.post('/user/logout-all', userAuth, async (req,res)=>{
     }
 });
 
-router.patch('/user/edit', userAuth,async (req,res)=>{
+router.patch('/user/edit', auth,async (req,res)=>{
     const validKeys = ['userName','password','email'];
     const reqKeys = Object.keys(req.body);
     for(let key of reqKeys){
@@ -68,7 +68,7 @@ router.patch('/user/edit', userAuth,async (req,res)=>{
     }
 });
 
-router.get('/user/', userAuth, async (req,res)=>{
+router.get('/user/', auth, async (req,res)=>{
     try{
         const user = await User.find({ });
         if(!user){

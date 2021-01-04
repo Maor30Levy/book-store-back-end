@@ -1,5 +1,5 @@
 const express = require('express');
-const {costumerAuth} = require('../middleware/auth');
+const auth = require('../middleware/auth');
 const Costumer = require('../models/costumerModel');
 const router = new express.Router();
 
@@ -24,7 +24,7 @@ router.post('/costumer/login',async (req,res)=>{
     }
 });
 
-router.post('/costumer/logout', costumerAuth ,async (req,res)=>{
+router.post('/costumer/logout', auth ,async (req,res)=>{
     try{
         const costumer = req.user;
         costumer.tokens = costumer.tokens.filter((token)=>{
@@ -37,7 +37,7 @@ router.post('/costumer/logout', costumerAuth ,async (req,res)=>{
     }
 });
 
-router.post('/costumer/logout-all', costumerAuth, async (req,res)=>{
+router.post('/costumer/logout-all', auth, async (req,res)=>{
     try{
         const costumer = req.user;
         costumer.tokens = [];
@@ -48,7 +48,7 @@ router.post('/costumer/logout-all', costumerAuth, async (req,res)=>{
     }
 });
 
-router.patch('/costumer/edit', costumerAuth,async (req,res)=>{
+router.patch('/costumer/edit', auth,async (req,res)=>{
     const validKeys = ['userName','password','email'];
     const reqKeys = Object.keys(req.body);
     for(let key of reqKeys){
@@ -68,7 +68,7 @@ router.patch('/costumer/edit', costumerAuth,async (req,res)=>{
     }
 });
 
-router.get('/costumer/', costumerAuth, async (req,res)=>{
+router.get('/costumer/', auth, async (req,res)=>{
     try{
         const costumer = req.user;
         if(!costumer){
@@ -93,7 +93,7 @@ router.get('/costumer/getUserNames', async (req,res)=>{
     }    
 });
 
-router.get('/costumer/cart', costumerAuth, async (req,res)=>{
+router.get('/costumer/cart', auth, async (req,res)=>{
     try{
         const costumer = req.user;
         if(!costumer){
