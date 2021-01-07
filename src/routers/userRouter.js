@@ -70,6 +70,7 @@ router.patch('/user/edit', auth,async (req,res)=>{
 
 router.get('/user/', auth, async (req,res)=>{
     try{
+        
         const user = await User.find({ });
         if(!user){
             return res.status(404).send({status: 404, message: 'User not found'});

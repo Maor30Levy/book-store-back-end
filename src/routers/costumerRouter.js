@@ -1,12 +1,27 @@
 const express = require('express');
+const multer = require('multer');
 const auth = require('../middleware/auth');
 const Costumer = require('../models/costumerModel');
 const router = new express.Router();
 
+const upload = multer({
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload an image'))
+        }
 
-router.post('/costumer/new',async (req,res)=>{
+        cb(undefined, true)
+    }
+});
+
+
+router.post('/costumer/new', async (req,res)=>{
     try{
         const costumer = await new Costumer(req.body);
+        // costumer.avatar = req.file.buffer;
         const token = await costumer.generateAuthToken();
         res.status(201).send({costumer,token});
     }catch(err){
@@ -14,9 +29,9 @@ router.post('/costumer/new',async (req,res)=>{
     }
     
 });
+
 router.post('/costumer/login',async (req,res)=>{
     try{
-        console.log(req.body.userName, req.body.password);
         const costumer = await Costumer.findByCredentials(req.body.userName, req.body.password);
         
         const token = await costumer.generateAuthToken();
@@ -111,5 +126,50 @@ router.get('/costumer/cart', auth, async (req,res)=>{
         res.status(500).send();
     }    
 });
+
+router.patch('/costumer/cart/add-book', auth, async (req,res)=>{
+    try{
+        const costumer = req.user;
+        if(!costumer){
+            return res.status(404).send({status: 404, message: 'No available details'});
+        }
+        costumer.cart = costumer.cart.concat(req.body);
+        await costumer.save();
+        res.send(costumer.cart);
+    }catch(err){
+        res.status(500).send();
+    }    
+});
+
+router.patch('/costumer/cart/remove-book', auth, async (req,res)=>{
+    try{
+        const costumer = req.user;
+        if(!costumer){
+            return res.status(404).send({status: 404, message: 'No available details'});
+        }
+        costumer.cart = costumer.cart.filter((book)=>{
+            return book.isbn !== req.body.isbn;
+        });
+        await costumer.save();
+        res.send(costumer.cart);
+    }catch(err){
+        res.status(500).send();
+    }    
+});
+
+router.get('/costumer/:userName/avatar', async (req,res)=>{
+    try{
+        const user = await Costumer.findById(req.params.userName);
+        if(!user || !user.avatar){
+            throw new Error()
+        }
+        res.set('Content-Type', 'image/jpg');
+        res.send(user.avatar);
+        }catch(err){
+        res.status(404).send('Avatar not found'); 
+    }
+});
+
+
 
 module.exports = router;

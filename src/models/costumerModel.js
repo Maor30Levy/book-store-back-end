@@ -32,9 +32,13 @@ const costumerSchema = new mongoose.Schema({
         }
     }],
     cart: [{
-        type: String,
-        default: []
-    }],
+            isbn:{
+                type: String
+            },
+            quantity:{
+                type: Number
+            }
+        }],
     avatar: {
         type: Buffer,
     }
