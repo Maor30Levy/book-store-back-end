@@ -8,7 +8,6 @@ router.post('/books/new', auth, async (req,res)=>{
     
     try{
         const book = await new Book(req.body);
-        book.renderTags();
         await book.save();
         res.status(201).send(book);
     }catch(err){
@@ -54,7 +53,6 @@ router.patch('/books/edit/:isbn', auth,async (req,res)=>{
         for (let key of reqKeys){
             book[key] = req.body[key];
         }
-        book.renderTags();
         await book.save();
         res.send(book);
     }catch(err){
@@ -125,14 +123,22 @@ router.get('/books/:isbn',async (req,res)=>{
     }
 });
 
-router.patch('/books/add-comment', async (req,res)=>{
+router.post('/books/add-comment', async (req,res)=>{
     try{
-    const book = await Book.findOne({isbn: req.body.isbn});
-    if(req.body.rating){
-        
-    }
+        const isbn = req.body.isbn;
+        const book = await Book.findOne({isbn});
+        if(req.body.rating){
+            let rating = (book.rating)*book.numOfRatings;
+            book.numOfRatings++;
+            book.rating = Math.round(( (rating + req.body.rating) / book.numOfRatings )*100 )/100;
+        }
+        if(req.body.comment){
+            book.comments.push(req.body.comment);
+        }
+        await book.save();
+        res.send(book); 
     }catch(err){
-        
+        res.send({message: err.message}); 
     }
 
 });

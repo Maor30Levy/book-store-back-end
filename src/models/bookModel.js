@@ -25,11 +25,14 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    numOfRatings:{
+        type: Number,
+        default: 0
+    },
     comments: [{
-     comment: {
         type: String
      }   
-    }],
+    ],
     isbn: {
         type: String,
         trim: true,
@@ -43,7 +46,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
 
     },
-    tags: [String],
+    
     
 },
 {
@@ -63,15 +66,6 @@ bookSchema.methods.toJSON = function () {
 
     return bookObject;
 };
-
-bookSchema.methods.renderTags = function (){
-    const book = this;
-    book.tags = [];
-    book.tags = book.title.toLowerCase().split(' ');
-    book.tags = book.tags.concat(book.author.toLowerCase().split(' '));
-    book.tags = book.tags.concat(book.category.toLowerCase().split(' '));
-    console.log(book.tags);
-}
 
 const Book = mongoose.model('Book', bookSchema);
 
