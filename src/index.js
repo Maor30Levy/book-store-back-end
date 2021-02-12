@@ -3,7 +3,7 @@ const cors = require('cors');
 const userRouter = require('./routers/userRouter');
 const bookRouter = require('./routers/bookRouter');
 const costumerRouter = require('./routers/costumerRouter');
-const port = process.env.PORT;
+const port = process.env.PORT | 3001;
 const app = express();
 require('./db/mongoose');
 

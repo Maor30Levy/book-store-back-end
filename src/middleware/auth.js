@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const Costumer = require('../models/costumerModel');
-
+const secret = process.env.JWT_SECRET | '11this1is1my1secret11';
 const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '');
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, secret);
         let user;
         if(req.url.includes('costumer')){
             user = await Costumer.findOne({ _id: decoded._id, 'tokens.token': token });

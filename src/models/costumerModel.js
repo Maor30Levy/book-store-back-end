@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 
+const secret = process.env.JWT_SECRET | '11this1is1my1secret11';
+
 const costumerSchema = new mongoose.Schema({
     userName: {
         type: String,
@@ -63,7 +65,7 @@ costumerSchema.statics.findByCredentials = async (userName,password)=>{
 
 costumerSchema.methods.generateAuthToken = async function () {
     const costumer = this;
-    const token = jwt.sign({ _id: costumer._id.toString() }, process.env.JWT_SECRET);
+    const token = jwt.sign({ _id: costumer._id.toString() }, secret);
     costumer.tokens = costumer.tokens.concat({ token });
     await costumer.save();
     return token;
